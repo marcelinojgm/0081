@@ -38,8 +38,8 @@ public class SupportSystem
 
         while(!finished) {
             String input = reader.getInput();
-
-            if(input.replace(" ","").startsWith("bye")) {
+            //comprobamos si quitando todos los espacios se a escrito solamente bye en cualquiera de sus formas
+            if(input.replace(" ","").regionMatches(true, 0, "bye", 0, 3)) {
                 finished = true;
             }
             else {
