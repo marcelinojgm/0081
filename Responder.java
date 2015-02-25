@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class Responder
 {
     private Random random;
+    private HashMap<String, String> mapResponse;
     private ArrayList<String> listResponse;
     /**
      * Construct a Responder - nothing to do
@@ -23,15 +24,26 @@ public class Responder
         listResponse.add("mensage 1"); 
         listResponse.add("mensage 2"); 
         listResponse.add("mensage 3"); 
-       
+
+        mapResponse = new HashMap<>();
+        mapResponse.put("hola","hola, que tal estas");
+        mapResponse.put("bien","me alegro");
+        mapResponse.put("mal","que problema tienes");
+        mapResponse.put("adios","no te marches");
     }
 
     /**
      * Generate a response.
      * @return   A string that should be displayed as the response
      */
-    public String generateResponse()
+    public String generateResponse(String value)
     {
-        return listResponse.get(random.nextInt(listResponse.size())) ;
+        String response = mapResponse.get(value);
+        if(response == null)
+        {
+            response = listResponse.get(random.nextInt(listResponse.size()));
+        }
+        return response;
     }
+
 }
