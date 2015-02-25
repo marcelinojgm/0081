@@ -11,6 +11,7 @@ import java.util.Scanner;
 public class InputReader
 {
     private Scanner reader;
+    
 
     /**
      * Create a new InputReader that reads text from the text terminal.
