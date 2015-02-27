@@ -30,8 +30,11 @@ public class InputReader
     public String getInput()
     {
         System.out.print("> ");         // print prompt
-        String inputLine = reader.nextLine();
-
-        return inputLine;
+        //guardado de cadena introducida sin espacios al principio y final
+        String inputLine = reader.nextLine().trim();
+        
+        //separacion por palabras de la cadena 
+        String[] imput =  inputLine.split(" ");
+        return imput[0];
     }
 }
