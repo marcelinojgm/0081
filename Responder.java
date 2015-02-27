@@ -1,6 +1,7 @@
 import java.util.Random;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashSet;
 /**
  * The responder class represents a response generator object.
  * It is used to generate an automatic response to an input string.
@@ -34,16 +35,30 @@ public class Responder
 
     /**
      * Generate a response.
-     * @return   A string that should be displayed as the response
+     * @return A string that should be displayed as the response
      */
-    public String generateResponse(String value)
+    public String generateResponse(HashSet<String> value)
     {
-        String response = mapResponse.get(value);
+        String response = null;
+        
+        if(!value.isEmpty()){
+            //busqueda de las palabras introducidas entre las claves de posibles respuestas
+         for (String palabra : value){
+             if( mapResponse.containsKey(palabra)){
+                 response = mapResponse.get(palabra);
+                 break;
+                }
+         }
+        }
+        
+        //si el texto introducido por el usuario esta vacio genera una respuesta aleatoria
         if(response == null)
         {
             response = listResponse.get(random.nextInt(listResponse.size()));
         }
+       
         return response;
     }
 
 }
+

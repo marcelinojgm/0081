@@ -1,3 +1,4 @@
+import java.util.HashSet;
 /**
  * This class implements a technical support system. It is the top
  * level class in this project. The support system communicates via
@@ -37,9 +38,9 @@ public class SupportSystem
         printWelcome();
 
         while(!finished) {
-            String input = reader.getInput();
+            HashSet<String> input = reader.getInput();
             //comprobamos si quitando todos los espacios se a escrito solamente bye en cualquiera de sus formas
-            if(input.replace(" ","").regionMatches(true, 0, "bye", 0, 3)) {
+            if(input.contains("bye")) {
                 finished = true;
             }
             else {
