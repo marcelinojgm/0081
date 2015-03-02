@@ -1,6 +1,8 @@
 import java.util.Random;
+import java.util.HashMap;
 import java.util.ArrayList;
-
+import java.util.HashSet;
+import java.util.Iterator;
 /**
  * The responder class represents a response generator object.
  * It is used to generate an automatic response to an input string.
@@ -10,30 +12,118 @@ import java.util.ArrayList;
  */
 public class Responder
 {
-    //elemento aleatorio
-    public Random random;
-    public ArrayList<String> list; 
-
+    private Random random;
+    private HashMap<HashSet<String>, String> mapResponse;
+    private ArrayList<String> listResponse;
     /**
      * Construct a Responder - nothing to do
      */
     public Responder()
     {
-        this.random = null;
-        this.list = new ArrayList<>();
-        list.add("That sounds interesting. Tell me more...");
-        list.add("no te entiendo");
-        list.add("has probado a reiniciar el equipo");
-        list.add("apaga y enciede el equipo");
-        list.add("en estos momentos no podemos atenderle persone las molestias, pruebe en unos instantes");
+        random = new Random();
+        listResponse = new ArrayList<>();
+        listResponse.add("mensage 0");  
+        listResponse.add("mensage 1"); 
+        listResponse.add("mensage 2"); 
+        listResponse.add("mensage 3"); 
+
+        mapResponse = new HashMap<>();
+
+        HashSet<String> conjunto1 = conjuntoPalabras("hola");
+        mapResponse.put(conjunto1, "que tal estas");
+
+        HashSet<String> conjunto2 = conjuntoPalabras("bien");
+        mapResponse.put(conjunto2,"me alegro");
+
+        HashSet<String> conjunto3 = conjuntoPalabras("mal");
+        mapResponse.put(conjunto3,"que problema tienes");
+
+        HashSet<String> conjunto4 = conjuntoPalabras("adios");
+        mapResponse.put(conjunto4,"no te marches");
+
+        HashSet<String> conjunto5 = conjuntoPalabras("free,app");
+        mapResponse.put(conjunto5,"no tenemos app gratuitas");
+
+       
+        HashSet<String> conjunto6 = conjuntoPalabras("crash,linux");
+        mapResponse.put(conjunto6,"contacte con nuestro servicio tecnico tlf: 555-1-22212-22");
+    
+
+        HashSet<String> conjunto7 = conjuntoPalabras("error,windows");
+        mapResponse.put(conjunto7,"PANTALLAZO AZUL!!!!!!!");
+       
+    }
+
+    /**
+     * retorna el conjunto de palabras de una cadena de caracteres pasada de palabras pasadas por comas
+     * @param cadena palabras que se desean incluir separadas por comas
+     * @return retorna conjunto de palabras
+     */
+
+    private HashSet<String> conjuntoPalabras(String cadena){
+        HashSet<String> conjunto = new HashSet<>();
+        //separamos las palabras por comas
+        String[] palabras = cadena.split(",");
+        //añadimos las palabras al conjunto
+        for(int i=0; i < palabras.length; i++){
+            conjunto.add(palabras[i]);
+        }
+        return conjunto;
     }
 
     /**
      * Generate a response.
-     * @return   A string that should be displayed as the response
+     * @return A string that should be displayed as the response
      */
-    public String generateResponse()
+    public String generateResponse(HashSet<String> value)
     {
-        return list.get(random.nextInt(list.size()));
+        String response = null;
+        //si se ha escrito algo
+        if(!value.isEmpty()){
+            //true las palabras clave escritas contienen todas las plabras contenidas en una clave del hashMap
+            //false las palabras escritas no coinciden con las claves del hashMap
+            boolean contienePalabrasClave = false;
+
+            //iterador con las claves del hashMap
+            Iterator<HashSet<String>> claves = mapResponse.keySet().iterator();
+
+            //recorremos cada una de las claves
+            while(claves.hasNext()&& !contienePalabrasClave){
+                //clave actual
+                HashSet<String> claveActual = claves.next();
+                        //iterador con las plabras de la clave actual
+                Iterator<String> palabrasClave = claveActual.iterator();  
+                //true la palabra clave ha sido escrita
+                //la palabra clave no ha sido escrita
+                boolean escrita = true;
+                //recorredido de cada palabra de la clave comprobando que se haya escrito
+                while(palabrasClave.hasNext() && escrita){
+                    String palabra = palabrasClave.next();
+                    //si la palabra no ha sido escrita
+                    if(!value.contains(palabra)){
+                        //indicamos que la palabra no ha sido escrita por lo que se pasara a la siguiente clave
+                        escrita = false;
+                    }
+
+                }
+                //si las palabras del clave han sido escritas
+                if(escrita){
+                    //guardado de la respuesta segun la clave 
+                    //de la que se ha introducido todas las palabras
+                    response = mapResponse.get(claveActual);
+                    contienePalabrasClave = true;
+                }
+            }
+
+        }
+        //si el texto introducido por el usuario esta vacio genera una respuesta aleatoria
+        if(response == null)
+        {
+            response = listResponse.get(random.nextInt(listResponse.size()));
+        }
+
+        return response;
     }
+
 }
+
