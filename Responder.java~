@@ -21,11 +21,7 @@ public class Responder
     public Responder()
     {
         random = new Random();
-        listResponse = new ArrayList<>();
-        listResponse.add("mensage 0");  
-        listResponse.add("mensage 1"); 
-        listResponse.add("mensage 2"); 
-        listResponse.add("mensage 3"); 
+        generateRandomResponse();
 
         mapResponse = new HashMap<>();
 
@@ -44,14 +40,25 @@ public class Responder
         HashSet<String> conjunto5 = conjuntoPalabras("free,app");
         mapResponse.put(conjunto5,"no tenemos app gratuitas");
 
-       
-        HashSet<String> conjunto6 = conjuntoPalabras("crash,linux");
+        HashSet<String> conjunto6 = conjuntoPalabras("crash,linux,problem");
         mapResponse.put(conjunto6,"contacte con nuestro servicio tecnico tlf: 555-1-22212-22");
-    
 
         HashSet<String> conjunto7 = conjuntoPalabras("error,windows");
         mapResponse.put(conjunto7,"PANTALLAZO AZUL!!!!!!!");
-       
+
+    }
+
+    /**
+     * genera respuestas aleatorias y las guarda en listResponse
+     */
+    private void generateRandomResponse(){
+
+        listResponse = new ArrayList<>();
+        listResponse.add("mensage 0");  
+        listResponse.add("mensage 1"); 
+        listResponse.add("mensage 2"); 
+        listResponse.add("mensage 3"); 
+
     }
 
     /**
@@ -91,7 +98,7 @@ public class Responder
             while(claves.hasNext()&& !contienePalabrasClave){
                 //clave actual
                 HashSet<String> claveActual = claves.next();
-                        //iterador con las plabras de la clave actual
+                //iterador con las plabras de la clave actual
                 Iterator<String> palabrasClave = claveActual.iterator();  
                 //true la palabra clave ha sido escrita
                 //la palabra clave no ha sido escrita
@@ -118,8 +125,13 @@ public class Responder
         }
         //si el texto introducido por el usuario esta vacio genera una respuesta aleatoria
         if(response == null)
-        {
-            response = listResponse.get(random.nextInt(listResponse.size()));
+        { 
+            if(listResponse.size() > 0){
+                response = listResponse.remove(random.nextInt(listResponse.size()));
+            }
+            else{
+                response = "no entiendo su pregunta";
+            }
         }
 
         return response;

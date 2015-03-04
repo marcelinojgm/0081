@@ -21,37 +21,44 @@ public class Responder
     public Responder()
     {
         random = new Random();
+        generateRandomResponse();
+
+        mapResponse = new HashMap<>();
+
+        HashSet<String> conjunto1 = conjuntoPalabras("free,app");
+        mapResponse.put(conjunto1,"no tenemos app gratuitas");
+
+        HashSet<String> conjunto1a = conjuntoPalabras("app");
+        mapResponse.put(conjunto1a,"sobre que app");
+
+        HashSet<String> conjunto1b = conjuntoPalabras("free");
+        mapResponse.put(conjunto1b,"is free!!!!");
+
+        HashSet<String> conjunto2 = conjuntoPalabras("crash,linux,problem");
+        mapResponse.put(conjunto2,"contacte con nuestro servicio tecnico tlf: 555-1-22212-22");
+
+        HashSet<String> conjunto2a = conjuntoPalabras("crash");
+        mapResponse.put(conjunto2a,"ha roto algo?");
+
+        HashSet<String> conjunto2b = conjuntoPalabras("linux");
+        mapResponse.put(conjunto2b,"GNU/Linux es el kernel libre similar a Unix ");
+
+        HashSet<String> conjunto2c = conjuntoPalabras("problem");
+        mapResponse.put(conjunto2c,"describame su problema");
+
+    
+    }
+    /**
+     * genera respuestas aleatorias y las guarda en listResponse
+     */
+    private void generateRandomResponse(){
+
         listResponse = new ArrayList<>();
         listResponse.add("mensage 0");  
         listResponse.add("mensage 1"); 
         listResponse.add("mensage 2"); 
         listResponse.add("mensage 3"); 
 
-        mapResponse = new HashMap<>();
-
-        HashSet<String> conjunto1 = conjuntoPalabras("hola");
-        mapResponse.put(conjunto1, "que tal estas");
-
-        HashSet<String> conjunto2 = conjuntoPalabras("bien");
-        mapResponse.put(conjunto2,"me alegro");
-
-        HashSet<String> conjunto3 = conjuntoPalabras("mal");
-        mapResponse.put(conjunto3,"que problema tienes");
-
-        HashSet<String> conjunto4 = conjuntoPalabras("adios");
-        mapResponse.put(conjunto4,"no te marches");
-
-        HashSet<String> conjunto5 = conjuntoPalabras("free,app");
-        mapResponse.put(conjunto5,"no tenemos app gratuitas");
-
-       
-        HashSet<String> conjunto6 = conjuntoPalabras("crash,linux,problem");
-        mapResponse.put(conjunto6,"contacte con nuestro servicio tecnico tlf: 555-1-22212-22");
-    
-
-        HashSet<String> conjunto7 = conjuntoPalabras("error,windows");
-        mapResponse.put(conjunto7,"PANTALLAZO AZUL!!!!!!!");
-       
     }
 
     /**
@@ -78,48 +85,18 @@ public class Responder
     public String generateResponse(HashSet<String> value)
     {
         String response = null;
-        //si se ha escrito algo
-        if(!value.isEmpty()){
-            //true las palabras clave escritas contienen todas las plabras contenidas en una clave del hashMap
-            //false las palabras escritas no coinciden con las claves del hashMap
-            boolean contienePalabrasClave = false;
-
-            //iterador con las claves del hashMap
-            Iterator<HashSet<String>> claves = mapResponse.keySet().iterator();
-
-            //recorremos cada una de las claves
-            while(claves.hasNext()&& !contienePalabrasClave){
-                //clave actual
-                HashSet<String> claveActual = claves.next();
-                        //iterador con las plabras de la clave actual
-                Iterator<String> palabrasClave = claveActual.iterator();  
-                //true la palabra clave ha sido escrita
-                //la palabra clave no ha sido escrita
-                boolean escrita = true;
-                //recorredido de cada palabra de la clave comprobando que se haya escrito
-                while(palabrasClave.hasNext() && escrita){
-                    String palabra = palabrasClave.next();
-                    //si la palabra no ha sido escrita
-                    if(!value.contains(palabra)){
-                        //indicamos que la palabra no ha sido escrita por lo que se pasara a la siguiente clave
-                        escrita = false;
-                    }
-
-                }
-                //si las palabras del clave han sido escritas
-                if(escrita){
-                    //guardado de la respuesta segun la clave 
-                    //de la que se ha introducido todas las palabras
-                    response = mapResponse.get(claveActual);
-                    contienePalabrasClave = true;
-                }
-            }
-
-        }
+        
+        response = mapResponse.get(value);
+        
         //si el texto introducido por el usuario esta vacio genera una respuesta aleatoria
         if(response == null)
-        {
-            response = listResponse.get(random.nextInt(listResponse.size()));
+        { 
+            if(listResponse.size() > 0){
+                response = listResponse.remove(random.nextInt(listResponse.size()));
+            }
+            else{
+                response = "no entiendo su pregunta";
+            }
         }
 
         return response;
